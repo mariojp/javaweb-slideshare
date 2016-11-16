@@ -1,3 +1,3 @@
 #!/bin/sh
 cd database
-java -cp hsqldb.jar org.hsqldb.server.Server -database.0 ﬁle:mydb --dbname.0 banco
+java -cp hsqldb.jar org.hsqldb.server.Server -database.0 ﬁle:banco --dbname.0 banco
