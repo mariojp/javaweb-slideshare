@@ -4,7 +4,7 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+# *.jar pasta lib nesse exemplo não estou usando o maven
 *.war
 *.ear
 
