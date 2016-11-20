@@ -2,9 +2,9 @@ package br.com.mariojp.javaweb;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -41,14 +41,16 @@ public class Autenticador extends HttpServlet {
 		boolean autenticado = false;
 		Connection con = BancoUtil.getConnection();
 		try {
-			Statement stmt = con.createStatement();
-			ResultSet resultSet = stmt.executeQuery("select * from usuarios where " + "login='" + user.getLogin().trim()
-					+ "' and " + "senha='" + user.getSenha().trim() + "';");
+			String sql = "select * from usuarios where " + "login=? and senha=?;";
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, user.getLogin());
+			pstmt.setString(2, user.getSenha());
+			ResultSet resultSet = pstmt.executeQuery();
 			if (resultSet.next()) {
 				autenticado = true;
 			}
 			resultSet.close();
-			stmt.close();
+			pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
