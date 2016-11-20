@@ -2,21 +2,29 @@ package br.com.mariojp.javaweb;
 
 import java.sql.*;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceUnit;
+
 public class BancoUtil {
 	
-	private static Connection connection;
+	@PersistenceUnit
+	private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory( "CRM" );;
+		
+
+	private static BancoUtil instancia; 
 	
-	static {
-		try {
-			Class.forName("org.hsqldb.jdbc.JDBCDriver");
-			connection = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/banco", "SA", "");
-		} catch (Exception e) {
-			e.printStackTrace();
+	private BancoUtil(){}
+
+	public static BancoUtil  getInstancia(){
+		if(instancia==null){
+			instancia = new BancoUtil();
 		}
+		return instancia;
 	}
 
-	public static Connection getConnection() {
-		return connection;
+	public EntityManagerFactory getEntityManagerFactory() {
+		return entityManagerFactory;
 	}
 	
 }
