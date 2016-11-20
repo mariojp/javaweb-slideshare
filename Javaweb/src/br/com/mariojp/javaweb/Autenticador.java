@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 public class Autenticador extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	private UsuarioDAO dao = new UsuarioDAO();
+
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Usuario user = new Usuario();
@@ -27,7 +29,7 @@ public class Autenticador extends HttpServlet {
 		String senha = request.getParameter("senha");
 		user.setLogin(login);
 		user.setSenha(senha);
-		if (autenticar(user)) {
+		if (dao.autenticar(user)) {
 			request.getSession().setAttribute("user", user);
 			response.sendRedirect("home.jsp");
 		} else {
@@ -37,24 +39,5 @@ public class Autenticador extends HttpServlet {
 		}
 	}
 
-	private boolean autenticar(Usuario user) {
-		boolean autenticado = false;
-		Connection con = BancoUtil.getConnection();
-		try {
-			String sql = "select * from usuarios where " + "login=? and senha=?;";
-			PreparedStatement pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, user.getLogin());
-			pstmt.setString(2, user.getSenha());
-			ResultSet resultSet = pstmt.executeQuery();
-			if (resultSet.next()) {
-				autenticado = true;
-			}
-			resultSet.close();
-			pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return autenticado;
-	}
 
 }
